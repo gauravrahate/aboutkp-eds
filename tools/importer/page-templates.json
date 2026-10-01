@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "projectType": "da"
+  },
+  "templates": [
+    {
+      "name": "expertise-and-impact",
+      "urls": [
+        "https://about.kaiserpermanente.org/expertise-and-impact"
+      ],
+      "representativeUrl": "https://about.kaiserpermanente.org/expertise-and-impact",
+      "description": "Section landing page: breadcrumb, light-grey intro (H1 + lead), and rows of image-overlay feature tiles",
+      "urlPattern": "/*",
+      "blocks": [
+        {
+          "name": "breadcrumb-trail",
+          "instances": [
+            ".c03-breadcrumb.breadcrumb"
+          ]
+        },
+        {
+          "name": "cards-feature",
+          "instances": [
+            ".c05-column-control"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Breadcrumb",
+          "selector": [
+            ".c03-breadcrumb.breadcrumb"
+          ],
+          "style": null,
+          "blocks": [
+            "breadcrumb-trail"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-2",
+          "name": "Page intro",
+          "selector": [
+            ".c14-page-hero"
+          ],
+          "style": "light-grey",
+          "blocks": [],
+          "defaultContent": [
+            ".c14-page-hero__headline",
+            ".c14-page-hero__text"
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Feature tiles row 1",
+          "selector": [
+            ".c05-column-control:nth-of-type(1)"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-feature"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-4",
+          "name": "Feature tiles row 2",
+          "selector": [
+            ".c05-column-control:nth-of-type(2)"
+          ],
+          "style": "light-grey",
+          "blocks": [
+            "cards-feature"
+          ],
+          "defaultContent": []
+        }
+      ]
+    }
+  ]
+}

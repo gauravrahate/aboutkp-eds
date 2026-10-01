@@ -1,0 +1,11 @@
+{
+  "type": "da",
+  "sites": {
+    "aboutkp-eds": {
+      "previewOrg": "gauravrahate",
+      "previewSite": "aboutkp-eds",
+      "contentHostUrl": "https://content.da.live/gauravrahate/aboutkp-eds/",
+      "libraryUrl": "https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json"
+    }
+  }
+}

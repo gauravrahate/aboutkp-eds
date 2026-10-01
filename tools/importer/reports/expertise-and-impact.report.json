@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "url": "https://about.kaiserpermanente.org/expertise-and-impact",
+  "path": "expertise-and-impact",
+  "timestamp": "2026-10-01T13:13:08.539Z",
+  "title": "Expertise and impact | Kaiser Permanente",
+  "template": "expertise-and-impact",
+  "blocks": [
+    "breadcrumb-trail",
+    "cards-feature",
+    "cards-feature"
+  ]
+}

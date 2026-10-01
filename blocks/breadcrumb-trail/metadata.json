@@ -1,0 +1,34 @@
+{
+  "variantName": "breadcrumb-trail",
+  "baseBlock": "breadcrumb",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "minimal",
+    "imagePattern": "noimg",
+    "purpose": "breadcrumb navigation",
+    "structure": "link + separator + current text",
+    "position": "top",
+    "isFullWidth": false,
+    "hasGrid": false,
+    "description": "Small, light-weight text trail on white background at top of main content; separator between crumbs; last crumb is current page shown as plain text (not linked)."
+  },
+  "contentPattern": {
+    "structure": "Single column list of crumbs: one row per crumb, each a link, followed by a final plain-text row for the current page.",
+    "buttonCount": 0,
+    "imageCount": 0
+  },
+  "usage": {
+    "pagesUsing": [
+      {
+        "url": "https://about.kaiserpermanente.org/expertise-and-impact",
+        "instanceId": null,
+        "screenshot": "migration-work/screenshot.png"
+      }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-01T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

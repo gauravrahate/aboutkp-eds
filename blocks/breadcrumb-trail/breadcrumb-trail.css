@@ -1,0 +1,70 @@
+/*
+ * Breadcrumb Trail
+ * Values from source computed styles (.c03-breadcrumb, about.kaiserpermanente.org):
+ * 70px white strip, crumbs 14px/20px weight 400, link #0074ad (hover #003b71 + underline),
+ * current page #0d1c3d, "|" separator. The source hides the breadcrumb below 40em (640px).
+ */
+
+/* The strip carries no section padding; its own height comes from the list padding. */
+main > .section.breadcrumb-trail-container {
+  display: none;
+  padding: 0;
+  background-color: var(--background-color);
+}
+
+@media (width >= 640px) {
+  main > .section.breadcrumb-trail-container {
+    display: block;
+  }
+}
+
+.breadcrumb-trail .breadcrumb-trail-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  /* 26px + 20px line + 24px = 70px strip with the text centred where the source draws it
+     (source: 20px/20px padding around a 32px line box). Wrapped lines keep the source 32px pitch. */
+  row-gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 26px 0 24px;
+}
+
+.breadcrumb-trail .breadcrumb-trail-item {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--body-font-size-s);
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: var(--text-color);
+}
+
+/* Separator between crumbs (source renders "|" with one space on each side, ~4px) */
+.breadcrumb-trail .breadcrumb-trail-item + .breadcrumb-trail-item::before {
+  content: '|';
+  padding: 0 4px;
+  color: var(--text-color);
+}
+
+.breadcrumb-trail .breadcrumb-trail-item a,
+.breadcrumb-trail .breadcrumb-trail-item span {
+  overflow-wrap: anywhere;
+}
+
+.breadcrumb-trail .breadcrumb-trail-item a:any-link {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.breadcrumb-trail .breadcrumb-trail-item a:hover,
+.breadcrumb-trail .breadcrumb-trail-item a:active {
+  color: var(--brand-dark-blue);
+  text-decoration: underline;
+}
+
+.breadcrumb-trail .breadcrumb-trail-item-current span {
+  color: var(--text-color);
+}

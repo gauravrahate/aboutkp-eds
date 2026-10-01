@@ -1,0 +1,35 @@
+{
+  "variantName": "cards-feature",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "dark",
+    "density": "moderate",
+    "imagePattern": "background",
+    "purpose": "cards-feature",
+    "structure": "2-up grid of image-overlay tiles: background image + H2 + paragraph + CTA",
+    "hasBgImage": true,
+    "position": "middle",
+    "isFullWidth": false,
+    "hasGrid": true,
+    "description": "2-up grid of near-square tiles; full-bleed photo background; dark-blue gradient overlay at bottom; white heading and body text; outlined (ghost) white CTA button; entire tile clickable."
+  },
+  "contentPattern": {
+    "structure": "Repeating rows of [image] | [H2 title, paragraph, CTA link]; 2 tiles per block instance.",
+    "buttonCount": 2,
+    "imageCount": 2
+  },
+  "usage": {
+    "pagesUsing": [
+      {
+        "url": "https://about.kaiserpermanente.org/expertise-and-impact",
+        "instanceId": null,
+        "screenshot": "migration-work/screenshot.png"
+      }
+    ],
+    "reuseCount": 2,
+    "lastUsed": "2026-10-01T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

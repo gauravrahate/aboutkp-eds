@@ -1,0 +1,33 @@
+/* brand tokens extracted from about.kaiserpermanente.org */
+:root {
+  /* Gotham is the source brand font (licensed); Montserrat is the free stand-in */
+  --heading-font-family: gotham, montserrat, montserrat-fallback, sans-serif;
+  --body-font-family: gotham, montserrat, montserrat-fallback, sans-serif;
+
+  /* colors */
+  --background-color: #fff;
+  --text-color: #0d1c3d;
+  --link-color: #0074ad;
+  --link-hover-color: #0078b3;
+  --light-grey-color: #f4f5f6;
+  --brand-dark-blue: #003b71;
+
+  /* spacing */
+  --section-padding: 40px;
+  --content-max-width: 1300px;
+  --content-padding: 30px;
+  --nav-height: 77px;
+}
+
+@media (width >= 640px) {
+  :root {
+    --section-padding: 60px;
+  }
+}
+
+/* the source header switches to the full desktop bar at 1024px */
+@media (width >= 1024px) {
+  :root {
+    --nav-height: 90px;
+  }
+}
