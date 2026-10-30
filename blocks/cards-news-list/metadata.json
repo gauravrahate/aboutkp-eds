@@ -1,0 +1,36 @@
+{
+  "variantName": "cards-news-list",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "imagePattern": "noimg",
+    "purpose": "latest-news-list",
+    "structure": "vertical list: date eyebrow + H3 title link + right arrow",
+    "hasBgImage": false,
+    "isFullWidth": false,
+    "hasGrid": false,
+    "description": "Single-column stack of text items in a narrow column; small grey-black date, dark-blue (#003b71) medium-weight H3 title, blue right-arrow aligned bottom-right of each item; whole item linked; generous vertical spacing between items."
+  },
+  "contentPattern": {
+    "structure": "Cards (no images): one cell per row; date paragraph + H3 title wrapped in a link. Typically 3 items per block instance. Decorative inline icons are dropped",
+    "buttonCount": 0,
+    "imageCount": 0
+  },
+  "usage": {
+    "pagesUsing": [
+      {
+        "url": "https://about.kaiserpermanente.org/",
+        "path": "/index",
+        "instanceId": null,
+        "screenshot": "migration-work/screenshot.png"
+      }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-28T00:00:00.000Z"
+  },
+  "reuseGuidance": "Use for text-only lists of dated, linked items (latest news, press releases). For linked tiles with images use cards-tile; for a single photo-background feature use cards-feature.",
+  "options": [],
+  "memberVariantIds": []
+}

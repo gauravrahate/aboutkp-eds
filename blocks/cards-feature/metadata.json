@@ -25,10 +25,22 @@
         "url": "https://about.kaiserpermanente.org/expertise-and-impact",
         "instanceId": null,
         "screenshot": "migration-work/screenshot.png"
+      },
+      {
+        "url": "https://about.kaiserpermanente.org/",
+        "path": "/index",
+        "instanceId": null,
+        "screenshot": "migration-work/screenshot.png"
+      },
+      {
+        "url": "https://about.kaiserpermanente.org/news",
+        "path": "/news",
+        "instanceId": null,
+        "screenshot": "migration-work/screenshot.png"
       }
     ],
-    "reuseCount": 2,
-    "lastUsed": "2026-10-01T00:00:00.000Z"
+    "reuseCount": 4,
+    "lastUsed": "2026-10-28T10:49:27.666Z"
   },
   "options": [],
   "memberVariantIds": []

@@ -4,6 +4,8 @@
 // PARSER IMPORTS
 import breadcrumbTrailParser from './parsers/breadcrumb-trail.js';
 import cardsFeatureParser from './parsers/cards-feature.js';
+import cardsTileParser from './parsers/cards-tile.js';
+import columnsMediaParser from './parsers/columns-media.js';
 
 // TRANSFORMER IMPORTS
 import cleanupTransformer from './transformers/aboutkp-cleanup.js';
@@ -13,59 +15,96 @@ import sectionsTransformer from './transformers/aboutkp-sections.js';
 const parsers = {
   'breadcrumb-trail': breadcrumbTrailParser,
   'cards-feature': cardsFeatureParser,
+  'cards-tile': cardsTileParser,
+  'columns-media': columnsMediaParser,
 };
 
 // PAGE TEMPLATE CONFIGURATION - Embedded from page-templates.json
 const PAGE_TEMPLATE = {
-  name: 'expertise-and-impact',
-  description: 'Section landing page: breadcrumb, light-grey intro (H1 + lead), and rows of image-overlay feature tiles',
-  urls: [
+  'name': 'expertise-and-impact',
+  'description': 'Section landing page: breadcrumb, intro (H1 + lead), then rows of feature tiles, content tiles and media-with-copy bands; section backgrounds come from the source markup',
+  'urls': [
     'https://about.kaiserpermanente.org/expertise-and-impact',
+    'https://about.kaiserpermanente.org/who-we-are'
   ],
-  blocks: [
+  'blocks': [
     {
-      name: 'breadcrumb-trail',
-      instances: ['.c03-breadcrumb.breadcrumb'],
+      'name': 'breadcrumb-trail',
+      'instances': [
+        '.c03-breadcrumb.breadcrumb'
+      ]
     },
     {
-      name: 'cards-feature',
-      instances: ['.c05-column-control'],
+      'name': 'cards-feature',
+      'instances': [
+        '.c05-column-control:has(.c08-feature)'
+      ]
     },
+    {
+      'name': 'cards-tile',
+      'instances': [
+        '.c05-column-control:has(.c06-content-tile, .c06a-content-tile)'
+      ]
+    },
+    {
+      'name': 'columns-media',
+      'instances': [
+        '.c13-horizontal-media-with-copy'
+      ]
+    }
   ],
-  sections: [
+  'sections': [
     {
-      id: 'section-1',
-      name: 'Breadcrumb',
-      selector: ['.c03-breadcrumb.breadcrumb'],
-      style: null,
-      blocks: ['breadcrumb-trail'],
-      defaultContent: [],
+      'id': 'section-breadcrumb',
+      'name': 'Breadcrumb',
+      'selector': [
+        '.c03-breadcrumb.breadcrumb'
+      ],
+      'style': null,
+      'blocks': [
+        'breadcrumb-trail'
+      ],
+      'defaultContent': []
     },
     {
-      id: 'section-2',
-      name: 'Page intro',
-      selector: ['.c14-page-hero'],
-      style: 'light-grey',
-      blocks: [],
-      defaultContent: ['.c14-page-hero__headline', '.c14-page-hero__text'],
+      'id': 'section-intro',
+      'name': 'Page intro',
+      'selector': [
+        '.c14-page-hero'
+      ],
+      'style': 'light-grey',
+      'blocks': [],
+      'defaultContent': [
+        '.c14-page-hero__headline',
+        '.c14-page-hero__text'
+      ]
     },
     {
-      id: 'section-3',
-      name: 'Feature tiles row 1',
-      selector: ['.c05-column-control:nth-of-type(1)'],
-      style: null,
-      blocks: ['cards-feature'],
-      defaultContent: [],
+      'id': 'section-media',
+      'name': 'Media with copy band (every instance is a section)',
+      'selector': [
+        '.c13-horizontal-media-with-copy'
+      ],
+      'style': 'light-grey',
+      'blocks': [
+        'columns-media'
+      ],
+      'defaultContent': []
     },
     {
-      id: 'section-4',
-      name: 'Feature tiles row 2',
-      selector: ['.c05-column-control:nth-of-type(2)'],
-      style: 'light-grey',
-      blocks: ['cards-feature'],
-      defaultContent: [],
-    },
-  ],
+      'id': 'section-tiles',
+      'name': 'Tile rows (every instance is a section)',
+      'selector': [
+        '.c05-column-control'
+      ],
+      'style': 'light-grey',
+      'blocks': [
+        'cards-feature',
+        'cards-tile'
+      ],
+      'defaultContent': []
+    }
+  ]
 };
 
 // TRANSFORMER REGISTRY - cleanup runs first, sections after

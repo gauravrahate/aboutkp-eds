@@ -6,11 +6,11 @@
     {
       "name": "expertise-and-impact",
       "urls": [
-        "https://about.kaiserpermanente.org/expertise-and-impact"
+        "https://about.kaiserpermanente.org/expertise-and-impact",
+        "https://about.kaiserpermanente.org/who-we-are"
       ],
       "representativeUrl": "https://about.kaiserpermanente.org/expertise-and-impact",
-      "description": "Section landing page: breadcrumb, light-grey intro (H1 + lead), and rows of image-overlay feature tiles",
-      "urlPattern": "/*",
+      "description": "Section landing page: breadcrumb, intro (H1 + lead), then rows of feature tiles, content tiles and media-with-copy bands; section backgrounds come from the source markup",
       "blocks": [
         {
           "name": "breadcrumb-trail",
@@ -21,10 +21,172 @@
         {
           "name": "cards-feature",
           "instances": [
-            ".c05-column-control"
+            ".c05-column-control:has(.c08-feature)"
+          ]
+        },
+        {
+          "name": "cards-tile",
+          "instances": [
+            ".c05-column-control:has(.c06-content-tile, .c06a-content-tile)"
+          ]
+        },
+        {
+          "name": "columns-media",
+          "instances": [
+            ".c13-horizontal-media-with-copy"
           ]
         }
       ],
+      "sections": [
+        {
+          "id": "section-breadcrumb",
+          "name": "Breadcrumb",
+          "selector": [
+            ".c03-breadcrumb.breadcrumb"
+          ],
+          "style": null,
+          "blocks": [
+            "breadcrumb-trail"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-intro",
+          "name": "Page intro",
+          "selector": [
+            ".c14-page-hero"
+          ],
+          "style": "light-grey",
+          "blocks": [],
+          "defaultContent": [
+            ".c14-page-hero__headline",
+            ".c14-page-hero__text"
+          ]
+        },
+        {
+          "id": "section-media",
+          "name": "Media with copy band (every instance is a section)",
+          "selector": [
+            ".c13-horizontal-media-with-copy"
+          ],
+          "style": "light-grey",
+          "blocks": [
+            "columns-media"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-tiles",
+          "name": "Tile rows (every instance is a section)",
+          "selector": [
+            ".c05-column-control"
+          ],
+          "style": "light-grey",
+          "blocks": [
+            "cards-feature",
+            "cards-tile"
+          ],
+          "defaultContent": []
+        }
+      ],
+      "urlPattern": "/*"
+    },
+    {
+      "name": "home",
+      "urls": [
+        "https://about.kaiserpermanente.org/"
+      ],
+      "representativeUrl": "https://about.kaiserpermanente.org/",
+      "description": "Homepage: featured grid band (stacked tiles | photo feature | latest news list + View all news), then a 3-up explore tiles band",
+      "blocks": [
+        {
+          "name": "cards-tile",
+          "instances": [
+            ".c05-column-control:has(.c17-link-list) .cell:has(.c06-content-tile, .c06a-content-tile)",
+            ".c05-column-control:not(:has(.c17-link-list, .c08-feature)):has(.c06-content-tile, .c06a-content-tile)"
+          ]
+        },
+        {
+          "name": "cards-feature",
+          "instances": [
+            ".c08-feature.query-base"
+          ]
+        },
+        {
+          "name": "cards-news-list",
+          "instances": [
+            ".c17-link-list__container-lists"
+          ]
+        }
+      ],
+      "urlPattern": "/",
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Featured news grid (tiles + feature + latest news)",
+          "selector": [
+            ".c05-column-control:has(.c17-link-list)",
+            ".responsivegrid > .aem-Grid > .c05-column-control:nth-of-type(1)"
+          ],
+          "style": "feature-grid",
+          "blocks": [
+            "cards-tile",
+            "cards-feature",
+            "cards-news-list"
+          ],
+          "defaultContent": [
+            ".c17-link-list__link-wrapper"
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Explore tiles (3-up)",
+          "selector": [
+            ".c05-column-control:not(:has(.c17-link-list, .c08-feature)):has(.c06-content-tile, .c06a-content-tile)",
+            ".responsivegrid > .aem-Grid > .c05-column-control:nth-of-type(2)"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-tile"
+          ],
+          "defaultContent": []
+        }
+      ]
+    },
+    {
+      "name": "news",
+      "urls": [
+        "https://about.kaiserpermanente.org/news"
+      ],
+      "representativeUrl": "https://about.kaiserpermanente.org/news",
+      "description": "News landing page: breadcrumb, grey intro (H1 + lead), featured mosaic band (tiles | photo feature | tiles), then the latest-news article grid (latest 12 articles)",
+      "blocks": [
+        {
+          "name": "breadcrumb-trail",
+          "instances": [
+            ".c03-breadcrumb.breadcrumb"
+          ]
+        },
+        {
+          "name": "cards-tile",
+          "instances": [
+            ".c05-column-control:has(.c08-feature):has(.c06-content-tile, .c06a-content-tile) .cell:has(.c06-content-tile, .c06a-content-tile):not(:has(.cell))"
+          ]
+        },
+        {
+          "name": "cards-feature",
+          "instances": [
+            ".c08-feature.query-base"
+          ]
+        },
+        {
+          "name": "cards-article-grid",
+          "instances": [
+            ".c04-filtered-card-grid"
+          ]
+        }
+      ],
+      "urlPattern": "/news",
       "sections": [
         {
           "id": "section-1",
@@ -53,27 +215,30 @@
         },
         {
           "id": "section-3",
-          "name": "Feature tiles row 1",
+          "name": "Featured news mosaic (tiles + feature + tiles)",
           "selector": [
-            ".c05-column-control:nth-of-type(1)"
+            ".c05-column-control:has(.c08-feature):has(.c06-content-tile, .c06a-content-tile)"
           ],
-          "style": null,
+          "style": "feature-grid",
           "blocks": [
+            "cards-tile",
             "cards-feature"
           ],
           "defaultContent": []
         },
         {
           "id": "section-4",
-          "name": "Feature tiles row 2",
+          "name": "Latest news listing (article grid)",
           "selector": [
-            ".c05-column-control:nth-of-type(2)"
+            ".c05-column-control:has(.c04-filtered-card-grid)"
           ],
-          "style": "light-grey",
+          "style": null,
           "blocks": [
-            "cards-feature"
+            "cards-article-grid"
           ],
-          "defaultContent": []
+          "defaultContent": [
+            ".c07-text h2"
+          ]
         }
       ]
     }

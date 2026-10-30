@@ -1,0 +1,35 @@
+{
+  "variantName": "columns-media",
+  "baseBlock": "columns",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "moderate",
+    "imagePattern": "large-side",
+    "purpose": "media-with-copy",
+    "structure": "text column (H2 + paragraph + outlined CTA) + large image column",
+    "hasBgImage": false,
+    "position": "middle",
+    "isFullWidth": false,
+    "hasGrid": true,
+    "description": "Two columns ~50/50 on desktop inside a full-width light-grey band (section style light-grey); text column vertically centred on the left; large landscape photo fills the right column; outlined (hollow) button; stacks on mobile with image first."
+  },
+  "contentPattern": {
+    "structure": "Single row: text cell (H2, paragraph, CTA link) | media cell (image, optionally linked). Cells may be authored in either order.",
+    "buttonCount": 1,
+    "imageCount": 1
+  },
+  "usage": {
+    "pagesUsing": [
+      {
+        "url": "https://about.kaiserpermanente.org/who-we-are",
+        "instanceId": null,
+        "screenshot": "migration-work/screenshot.png"
+      }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-01T00:00:00.000Z"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

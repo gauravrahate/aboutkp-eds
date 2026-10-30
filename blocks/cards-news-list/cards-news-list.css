@@ -1,0 +1,160 @@
+/*
+ * Cards News List (source: c17-link-list, featuredLinkList variation)
+ * ul > li.cards-news-list-item
+ *   > a.cards-news-list-link
+ *     > p.cards-news-list-date
+ *     > h3.cards-news-list-title
+ *     > span.cards-news-list-arrow
+ * Single-column stack; arrow cue bottom-right; the whole item is the link.
+ * Hover/focus: arrow turns green and a 4px green border draws around the item.
+ */
+.cards-news-list {
+  color: var(--text-color);
+}
+
+.cards-news-list > ul {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+}
+
+.cards-news-list .cards-news-list-item {
+  margin: 0 0 16px;
+}
+
+.cards-news-list .cards-news-list-link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 34px 34px 12px;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none;
+  outline: none;
+}
+
+.cards-news-list .cards-news-list-date {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.cards-news-list .cards-news-list-title {
+  margin: 0;
+  color: var(--text-color);
+  font-family: var(--heading-font-family);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+/* arrow cue: source icomoon glyph \e900 rotated 45deg (16px box at right/bottom 16px) */
+.cards-news-list .cards-news-list-arrow {
+  position: absolute;
+  right: 14px;
+  bottom: 16px;
+  width: 20px;
+  height: 16px;
+  background-color: var(--link-color);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 16' fill='none' stroke='%23000' stroke-width='2.25'%3E%3Cpath d='M0 8h18.4'/%3E%3Cpath d='M11.5 1.1 18.4 8l-6.9 6.9'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.cards-news-list .cards-news-list-link:hover .cards-news-list-arrow,
+.cards-news-list .cards-news-list-link:focus-visible .cards-news-list-arrow,
+.cards-news-list .cards-news-list-link:active .cards-news-list-arrow {
+  background-color: var(--brand-green);
+}
+
+/* animated green border (source .border::before/::after + borderDraw) */
+.cards-news-list .cards-news-list-link::before,
+.cards-news-list .cards-news-list-link::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.cards-news-list .cards-news-list-link::before {
+  top: 0;
+  right: 0;
+  padding-left: 5px;
+  border-top: 4px solid var(--brand-green);
+  border-left: 4px solid var(--brand-green);
+}
+
+.cards-news-list .cards-news-list-link::after {
+  bottom: 0;
+  left: 0;
+  padding-right: 5px;
+  border-bottom: 4px solid var(--brand-green);
+  border-right: 4px solid var(--brand-green);
+}
+
+.cards-news-list .cards-news-list-link:hover::before,
+.cards-news-list .cards-news-list-link:focus-visible::before,
+.cards-news-list .cards-news-list-link:active::before {
+  animation: cards-news-list-border-draw 0.8s ease-in-out 0.4s 1 normal forwards;
+}
+
+.cards-news-list .cards-news-list-link:hover::after,
+.cards-news-list .cards-news-list-link:focus-visible::after,
+.cards-news-list .cards-news-list-link:active::after {
+  animation: cards-news-list-border-draw 0.8s ease-in-out 0s 1 normal forwards;
+}
+
+@keyframes cards-news-list-border-draw {
+  25% {
+    width: 100%;
+    height: 0;
+    padding-top: 0;
+    visibility: visible;
+  }
+
+  50%,
+  75%,
+  100% {
+    width: 100%;
+    height: 100%;
+    visibility: visible;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cards-news-list .cards-news-list-link:hover::before,
+  .cards-news-list .cards-news-list-link:hover::after,
+  .cards-news-list .cards-news-list-link:focus-visible::before,
+  .cards-news-list .cards-news-list-link:focus-visible::after {
+    width: 100%;
+    height: 100%;
+    visibility: visible;
+    animation: none;
+  }
+}
+
+@media (width >= 640px) {
+  .cards-news-list .cards-news-list-date {
+    font-size: 14px;
+  }
+
+  .cards-news-list .cards-news-list-title {
+    min-height: 88px;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.01em;
+  }
+}
+
+@media (width >= 1024px) {
+  .cards-news-list .cards-news-list-link {
+    padding: 12px 34px 12px 12px;
+  }
+}

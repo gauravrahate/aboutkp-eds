@@ -1,0 +1,150 @@
+/*
+ * Columns Media: copy + large image side by side (source: c13-horizontal-media-with-copy).
+ * DOM (after decorate):
+ *   .columns-media > div.columns-media-row
+ *     > div.columns-media-copy  (h2, p, p.button-wrapper > a.button.secondary)
+ *     > div.columns-media-media (p > a > picture, or picture)
+ * < 640px: image stacked above the copy, full-width CTA (< 768px).
+ * >= 640px: copy left, image right (6/12 each), copy vertically centred.
+ * >= 1024px: copy narrows to 4/12 of the row and centres in its half.
+ */
+.columns-media > .columns-media-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 30px;
+}
+
+.columns-media > .columns-media-row + .columns-media-row {
+  margin-top: 60px;
+}
+
+/* ---------- Media ---------- */
+.columns-media .columns-media-media {
+  order: -1;
+  line-height: 0;
+  box-shadow: rgb(0 0 0 / 20%) 0 4px 20px 0;
+}
+
+.columns-media .columns-media-media p {
+  margin: 0;
+}
+
+.columns-media .columns-media-media a {
+  display: block;
+}
+
+.columns-media .columns-media-media picture,
+.columns-media .columns-media-media img {
+  display: block;
+  width: 100%;
+}
+
+.columns-media .columns-media-media img {
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* ---------- Copy ---------- */
+.columns-media .columns-media-copy {
+  color: var(--text-color);
+}
+
+.columns-media .columns-media-copy h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: -0.26px;
+  color: var(--text-color);
+}
+
+.columns-media .columns-media-copy p {
+  margin: 15px 0 0;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.columns-media .columns-media-copy > :first-child {
+  margin-top: 0;
+}
+
+.columns-media .columns-media-copy > :last-child {
+  margin-bottom: 0;
+}
+
+.columns-media .columns-media-copy p.button-wrapper {
+  margin: 30px 0 0;
+}
+
+/* CTA: hollow button (source a.hollow.button) */
+main .columns-media a.button.secondary:any-link {
+  width: 100%;
+  border-color: var(--link-color);
+  background-color: transparent;
+  color: #006ba6;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  padding: 11px 24px;
+}
+
+main .columns-media a.button.secondary:hover,
+main .columns-media a.button.secondary:focus-visible {
+  border-color: var(--brand-medium-blue);
+  background-color: var(--brand-medium-blue);
+  color: var(--background-color);
+  text-decoration: none;
+}
+
+/* ---------- Tablet / desktop ---------- */
+@media (width >= 640px) {
+  .columns-media > .columns-media-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    column-gap: 30px;
+  }
+
+  .columns-media .columns-media-media {
+    grid-column: 2;
+    grid-row: 1;
+    order: 0;
+  }
+
+  .columns-media .columns-media-copy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .columns-media .columns-media-copy h2 {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -0.64px;
+  }
+
+  .columns-media > .columns-media-row-no-media {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (width >= 768px) {
+  main .columns-media a.button.secondary:any-link {
+    width: auto;
+  }
+}
+
+@media (width >= 1024px) {
+  /* 4/12 of the row: (row + gutter) / 3 - gutter, expressed against the 6/12 column */
+  .columns-media .columns-media-copy {
+    justify-self: center;
+    width: calc(66.666% - 10px);
+    max-width: 550px;
+  }
+
+  .columns-media > .columns-media-row-no-media .columns-media-copy {
+    justify-self: start;
+    width: 100%;
+    max-width: none;
+  }
+}

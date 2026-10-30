@@ -8,9 +8,11 @@
   --background-color: #fff;
   --text-color: #0d1c3d;
   --link-color: #0074ad;
-  --link-hover-color: #0078b3;
+  --link-hover-color: #003b71;
   --light-grey-color: #f4f5f6;
   --brand-dark-blue: #003b71;
+  --brand-medium-blue: #0078b3;
+  --brand-green: #57a635;
 
   /* spacing */
   --section-padding: 40px;

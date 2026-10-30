@@ -16,7 +16,20 @@ export default function transform(hookName, element, payload) {
       '#onetrust-consent-sdk',
       'div.cloudservice.testandtarget',
       'div.cloudservice.google-recaptcha.configpage',
+      // Alert popup container: <div class="c38-alert-popup aem-GridColumn ..."> (home, line ~336)
+      'div.c38-alert-popup',
+      // Latest-news list heading, display:none on the source:
+      // <h5 class="c17-link-list__headline">News and information</h5> (home)
+      'h5.c17-link-list__headline',
     ]);
+    // Empty embed containers: <div class="shared-embed embed ..."><div class="cmp-embed"></div></div>
+    // (home, line ~507) and <div class="c24-html-embed ..."></div> (line ~590).
+    // Removed only when they carry no authorable content.
+    element.querySelectorAll('div.shared-embed, div.c24-html-embed').forEach((embed) => {
+      if (!embed.textContent.trim() && !embed.querySelector('img, picture, video, iframe, a, table')) {
+        embed.remove();
+      }
+    });
   }
 
   if (hookName === TransformHook.afterTransform) {

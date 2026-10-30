@@ -1,0 +1,36 @@
+{
+  "variantName": "cards-article-grid",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "moderate",
+    "imagePattern": "top",
+    "purpose": "article-grid",
+    "structure": "3-up wrapping grid of cards: image top + date eyebrow + H3 title + excerpt; static, authored rows only",
+    "hasBgImage": false,
+    "isFullWidth": false,
+    "hasGrid": true,
+    "description": "White cards with a soft drop shadow in a 3-column grid. Landscape image on top, small grey 14px date, dark-navy (#0d1c3d) 18px medium title, grey excerpt cut off with an ellipsis. The whole card is linked. Stacks to one column on mobile. The source filter sidebar and 'Show more...' loader are intentionally not reproduced (project owner decision: latest 12 articles only, static grid)."
+  },
+  "contentPattern": {
+    "structure": "Cards: one row per article, 2 cells: [image] | [date p, H3 title wrapped in a link, excerpt p]. Latest 12 articles only, newest first; static grid, no filters, no Show more. Image, date and excerpt are optional; decorative inline SVG icons are dropped",
+    "buttonCount": 0,
+    "imageCount": 12
+  },
+  "usage": {
+    "pagesUsing": [
+      {
+        "url": "https://about.kaiserpermanente.org/news",
+        "path": "/news",
+        "instanceId": null,
+        "screenshot": "migration-work/screenshot.png"
+      }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-28T00:00:00.000Z"
+  },
+  "reuseGuidance": "Use for grids of dated, linked articles with a thumbnail and excerpt (news listings, press releases). For text-only dated lists use cards-news-list; for image tiles with only a title use cards-tile; for a single photo-background feature use cards-feature.",
+  "options": [],
+  "memberVariantIds": []
+}

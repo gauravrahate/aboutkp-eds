@@ -7,7 +7,17 @@
  * The body is `display: contents` so its children are laid out by the tile
  * directly: on mobile the heading overlays the image and the text sits below;
  * from 640px the whole text stack overlays the image, anchored to the bottom.
+ * Wrapper, block and list are grid containers so a stretched grid area (the
+ * feature-grid middle column) propagates its height down to the tiles via
+ * stretch alignment; tiles are square at minimum and grow to fill the row.
+ * Outside such a context the heights stay content-based (2-up squares).
  */
+.cards-feature-wrapper,
+.cards-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .cards-feature > ul {
   list-style: none;
   margin: 0;
@@ -132,10 +142,12 @@ main .cards-feature .cards-feature-tile-body > p > a:only-child {
   transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
+/* source .button:hover/:focus/:active: rgb(0 120 179) fill, white text */
 main .cards-feature .cards-feature-tile-body > p > a:only-child:hover,
-main .cards-feature .cards-feature-tile-body > p > a:only-child:focus-visible {
-  border-color: var(--link-hover-color);
-  background-color: var(--link-hover-color);
+main .cards-feature .cards-feature-tile-body > p > a:only-child:focus,
+main .cards-feature .cards-feature-tile-body > p > a:only-child:active {
+  border-color: var(--brand-medium-blue);
+  background-color: var(--brand-medium-blue);
   color: #fff;
 }
 
@@ -150,11 +162,19 @@ main .cards-feature .cards-feature-tile-body > p > a:only-child:focus-visible {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* a single tile takes the full block width (e.g. feature-grid middle column) */
+  .cards-feature > ul:has(> li:only-child) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .cards-feature .cards-feature-tile {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    align-self: stretch;
+
+    /* width comes from the track; aspect-ratio only sets the minimum height */
+    place-self: stretch;
+    width: 100%;
     aspect-ratio: 1 / 1;
     background-color: var(--brand-dark-blue);
     color: #fff;
@@ -197,8 +217,6 @@ main .cards-feature .cards-feature-tile-body > p > a:only-child:focus-visible {
   }
 
   main .cards-feature .cards-feature-tile-body > p > a:only-child {
-    display: inline-block;
-    width: auto;
     color: #fff;
   }
 
@@ -213,5 +231,11 @@ main .cards-feature .cards-feature-tile-body > p > a:only-child:focus-visible {
   .cards-feature .cards-feature-tile-body > h2 {
     font-size: 32px;
     letter-spacing: -0.64px;
+  }
+
+  /* source .button is full width below 768px, intrinsic from 768px */
+  main .cards-feature .cards-feature-tile-body > p > a:only-child {
+    display: inline-block;
+    width: auto;
   }
 }

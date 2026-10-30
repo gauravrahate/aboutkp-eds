@@ -1,47 +1,45 @@
 /*
  * Breadcrumb Trail
  * Values from source computed styles (.c03-breadcrumb, about.kaiserpermanente.org):
- * 70px white strip, crumbs 14px/20px weight 400, link #0074ad (hover #003b71 + underline),
- * current page #0d1c3d, "|" separator. The source hides the breadcrumb below 40em (640px).
+ * 70px white band; list 32px line box with 20px top padding; crumbs 14px weight 400;
+ * link #0074ad (hover #003b71 + underline); current page #0d1c3d; "|" separator.
+ * The source hides the breadcrumb below 40em (640px).
+ *
+ * Block-scoped only. The section that holds this block needs its padding removed
+ * (and to be hidden below 640px) in styles/styles.css; see the block README.
  */
 
-/* The strip carries no section padding; its own height comes from the list padding. */
-main > .section.breadcrumb-trail-container {
+.breadcrumb-trail {
   display: none;
-  padding: 0;
-  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 @media (width >= 640px) {
-  main > .section.breadcrumb-trail-container {
+  .breadcrumb-trail {
     display: block;
   }
 }
 
+/* Source list: display block, padding 20px 30px 20px 0, 32px line box (16px/32px strut).
+   The source band clips that 72px box to 70px, so the bottom padding here is 18px. */
 .breadcrumb-trail .breadcrumb-trail-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-
-  /* 26px + 20px line + 24px = 70px strip with the text centred where the source draws it
-     (source: 20px/20px padding around a 32px line box). Wrapped lines keep the source 32px pitch. */
-  row-gap: 12px;
   list-style: none;
   margin: 0;
-  padding: 26px 0 24px;
+  padding: 20px 30px 18px 0;
+  line-height: 32px;
 }
 
+/* Source crumbs are 14px/20px inside the 32px line box. The 32px line height sits on the
+   item so the line box (and the 32px wrap pitch) holds without relying on the parent strut. */
 .breadcrumb-trail .breadcrumb-trail-item {
-  display: inline-flex;
-  align-items: center;
+  display: inline;
   font-size: var(--body-font-size-s);
   font-weight: 400;
-  line-height: 20px;
-  letter-spacing: 0;
+  line-height: 32px;
   color: var(--text-color);
 }
 
-/* Separator between crumbs (source renders "|" with one space on each side, ~4px) */
+/* Separator between crumbs: source renders "|" with one space on each side (~4px) */
 .breadcrumb-trail .breadcrumb-trail-item + .breadcrumb-trail-item::before {
   content: '|';
   padding: 0 4px;
@@ -61,8 +59,13 @@ main > .section.breadcrumb-trail-container {
 
 .breadcrumb-trail .breadcrumb-trail-item a:hover,
 .breadcrumb-trail .breadcrumb-trail-item a:active {
-  color: var(--brand-dark-blue);
+  color: var(--link-hover-color);
   text-decoration: underline;
+}
+
+/* Source keeps the link color on keyboard focus and shows the default focus ring, offset 1px */
+.breadcrumb-trail .breadcrumb-trail-item a:focus-visible {
+  outline-offset: 1px;
 }
 
 .breadcrumb-trail .breadcrumb-trail-item-current span {

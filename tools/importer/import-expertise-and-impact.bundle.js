@@ -42,7 +42,7 @@ var CustomImportScript = (() => {
   });
 
   // tools/importer/parsers/breadcrumb-trail.js
-  function parse(element, { document: document2 }) {
+  function parse(element, { document }) {
     let items = [...element.querySelectorAll("li.cmp-breadcrumb__item")];
     if (!items.length) {
       items = [...element.querySelectorAll("ol > li, ul > li")];
@@ -54,7 +54,7 @@ var CustomImportScript = (() => {
       const link = li.querySelector("a[href]");
       const isCurrent = li.classList.contains("cmp-breadcrumb__item--active") || i === items.length - 1;
       if (link && !isCurrent) {
-        const a = document2.createElement("a");
+        const a = document.createElement("a");
         a.href = link.getAttribute("href");
         a.textContent = link.textContent.replace(/\s+/g, " ").trim() || text;
         cells.push([a]);
@@ -66,12 +66,12 @@ var CustomImportScript = (() => {
       element.replaceWith(...element.childNodes);
       return;
     }
-    const block = WebImporter.Blocks.createBlock(document2, { name: "breadcrumb-trail", cells });
+    const block = WebImporter.Blocks.createBlock(document, { name: "breadcrumb-trail", cells });
     element.replaceWith(block);
   }
 
   // tools/importer/parsers/cards-feature.js
-  function parse2(element, { document: document2 }) {
+  function parse2(element, { document }) {
     let tiles = [...element.querySelectorAll(".c08-feature__template-container")];
     if (!tiles.length) {
       tiles = [...element.querySelectorAll(".c08-feature__wrap")];
@@ -83,7 +83,7 @@ var CustomImportScript = (() => {
         const bgEl = tile.querySelector('.c08-feature__background-wrap[style*="background-image"]') || tile.querySelector('[style*="background-image"]');
         const match = bgEl && (bgEl.getAttribute("style") || "").match(/background-image\s*:\s*url\(\s*['"]?([^'")]+)['"]?\s*\)/i);
         if (match) {
-          img = document2.createElement("img");
+          img = document.createElement("img");
           img.src = match[1];
           const alt = bgEl.getAttribute("aria-label");
           if (alt) img.alt = alt;
@@ -95,22 +95,22 @@ var CustomImportScript = (() => {
       const cta = tile.querySelector("a.c08-feature__link.button") || tile.querySelector("a.c08-feature__link:not(.c08-feature__link--absolute)");
       const textCell = [];
       if (heading) {
-        const h2 = document2.createElement("h2");
+        const h2 = document.createElement("h2");
         h2.textContent = heading.textContent.replace(/\s+/g, " ").trim();
         textCell.push(h2);
       }
       if (paragraphs.length) {
         textCell.push(...paragraphs);
       } else if (textWrap && textWrap.textContent.trim()) {
-        const p = document2.createElement("p");
+        const p = document.createElement("p");
         p.textContent = textWrap.textContent.trim();
         textCell.push(p);
       }
       if (cta) {
-        const a = document2.createElement("a");
+        const a = document.createElement("a");
         a.href = cta.getAttribute("href");
         a.textContent = cta.textContent.replace(/\s+/g, " ").trim();
-        const p = document2.createElement("p");
+        const p = document.createElement("p");
         p.append(a);
         textCell.push(p);
       }
@@ -121,7 +121,138 @@ var CustomImportScript = (() => {
       element.replaceWith(...element.childNodes);
       return;
     }
-    const block = WebImporter.Blocks.createBlock(document2, { name: "cards-feature", cells });
+    const block = WebImporter.Blocks.createBlock(document, { name: "cards-feature", cells });
+    element.replaceWith(block);
+  }
+
+  // tools/importer/parsers/cards-tile.js
+  function bgUrl(el) {
+    if (!el) return null;
+    const style = el.getAttribute("style") || "";
+    const m = style.match(/background-image\s*:\s*url\(\s*['"]?([^'")]+)['"]?\s*\)/i);
+    if (m) return m[1];
+    return el.getAttribute("data-background-image") || el.getAttribute("data-bg") || null;
+  }
+  function parse3(element, { document }) {
+    let tiles = [...element.querySelectorAll(".c06-content-tile__tile, .c06a-content-tile__tile")];
+    if (!tiles.length) {
+      tiles = [...element.querySelectorAll("a.c06-content-tile__link, a.c06a-content-tile__link")];
+    }
+    const cells = [];
+    tiles.forEach((tile) => {
+      const link = tile.closest("a[href]") || tile.querySelector("a[href]");
+      const bgEl = tile.querySelector(".c06-content-tile__bg-image, .c06a-content-tile__bg-image");
+      let img = bgEl && bgEl.querySelector("img") || tile.querySelector("img");
+      if (!img) {
+        const src = bgUrl(bgEl) || bgUrl(tile.querySelector('[style*="background-image"], [data-background-image]'));
+        if (src) {
+          img = document.createElement("img");
+          img.src = src;
+        }
+      }
+      if (img && !img.getAttribute("alt") && bgEl && bgEl.getAttribute("aria-label")) {
+        img.alt = bgEl.getAttribute("aria-label");
+      }
+      if (img && /\.svg$/i.test(img.getAttribute("src") || "")) {
+        img.setAttribute("src", `${img.getAttribute("src")}?format=svg`);
+      }
+      const headline = tile.querySelector(".c06-content-tile__headline, .c06a-content-tile__headline") || tile.querySelector("h1, h2, h3, h4, h5, h6");
+      const titleText = headline ? headline.textContent.replace(/\s+/g, " ").trim() : "";
+      const contentCell = [];
+      if (titleText) {
+        const h3 = document.createElement("h3");
+        if (link) {
+          const a = document.createElement("a");
+          a.href = link.getAttribute("href");
+          a.textContent = titleText;
+          h3.append(a);
+        } else {
+          h3.textContent = titleText;
+        }
+        contentCell.push(h3);
+      }
+      if (!img && !contentCell.length) return;
+      cells.push([img || "", contentCell.length ? contentCell : ""]);
+    });
+    if (!cells.length) {
+      element.replaceWith(...element.childNodes);
+      return;
+    }
+    const block = WebImporter.Blocks.createBlock(document, { name: "cards-tile", cells });
+    element.replaceWith(block);
+  }
+
+  // tools/importer/parsers/columns-media.js
+  var P = "c13-horizontal-media-with-copy";
+  function bgUrl2(el) {
+    if (!el) return null;
+    const style = el.getAttribute("style") || "";
+    const m = style.match(/background-image\s*:\s*url\(\s*['"]?([^'")]+)['"]?\s*\)/i);
+    if (m) return m[1];
+    return el.getAttribute("data-background-image") || el.getAttribute("data-bg") || null;
+  }
+  function parse4(element, { document }) {
+    const mediaWrap = element.querySelector(`.${P}__media-wrapper`);
+    const content = element.querySelector(`.${P}__content`) || element;
+    let img = mediaWrap ? mediaWrap.querySelector("img") : null;
+    if (!img) {
+      const bgEl = mediaWrap && (mediaWrap.querySelector(`.${P}__bg-image`) || mediaWrap.querySelector('[style*="background-image"], [data-background-image]')) || element.querySelector(`.${P}__bg-image`);
+      const src = bgUrl2(bgEl) || bgUrl2(mediaWrap);
+      if (src) {
+        img = document.createElement("img");
+        img.src = src;
+        const alt = bgEl && (bgEl.getAttribute("aria-label") || bgEl.getAttribute("title"));
+        if (alt) img.alt = alt;
+      }
+    }
+    const mediaLink = mediaWrap ? mediaWrap.querySelector("a[href]") : null;
+    let mediaCell = "";
+    if (img) {
+      if (mediaLink) {
+        const a = document.createElement("a");
+        a.href = mediaLink.getAttribute("href");
+        a.append(img);
+        mediaCell = a;
+      } else {
+        mediaCell = img;
+      }
+    }
+    const textCell = [];
+    const heading = content.querySelector(`.${P}__headline`) || content.querySelector("h1, h2, h3, h4");
+    if (heading) {
+      const h2 = document.createElement("h2");
+      h2.textContent = heading.textContent.replace(/\s+/g, " ").trim();
+      textCell.push(h2);
+    }
+    const textWrap = content.querySelector(`.${P}__text`);
+    if (textWrap) {
+      const paras = [...textWrap.querySelectorAll("p")];
+      if (paras.length) textCell.push(...paras);
+      else if (textWrap.textContent.trim()) {
+        const p = document.createElement("p");
+        p.textContent = textWrap.textContent.trim();
+        textCell.push(p);
+      }
+    }
+    const ctas = [...content.querySelectorAll(`.${P}__link a[href]`)];
+    if (!ctas.length) {
+      const fallback = content.querySelector("a.button[href]");
+      if (fallback) ctas.push(fallback);
+    }
+    ctas.forEach((cta) => {
+      const a = document.createElement("a");
+      a.href = cta.getAttribute("href");
+      a.textContent = cta.textContent.replace(/\s+/g, " ").trim();
+      const p = document.createElement("p");
+      p.append(a);
+      textCell.push(p);
+    });
+    if (!textCell.length && !mediaCell) {
+      element.replaceWith(...element.childNodes);
+      return;
+    }
+    const cells = [[textCell.length ? textCell : "", mediaCell]];
+    const block = WebImporter.Blocks.createBlock(document, { name: "columns-media", cells });
     element.replaceWith(block);
   }
 
@@ -132,8 +263,18 @@ var CustomImportScript = (() => {
       WebImporter.DOMUtils.remove(element, [
         "#onetrust-consent-sdk",
         "div.cloudservice.testandtarget",
-        "div.cloudservice.google-recaptcha.configpage"
+        "div.cloudservice.google-recaptcha.configpage",
+        // Alert popup container: <div class="c38-alert-popup aem-GridColumn ..."> (home, line ~336)
+        "div.c38-alert-popup",
+        // Latest-news list heading, display:none on the source:
+        // <h5 class="c17-link-list__headline">News and information</h5> (home)
+        "h5.c17-link-list__headline"
       ]);
+      element.querySelectorAll("div.shared-embed, div.c24-html-embed").forEach((embed) => {
+        if (!embed.textContent.trim() && !embed.querySelector("img, picture, video, iframe, a, table")) {
+          embed.remove();
+        }
+      });
     }
     if (hookName === TransformHook.afterTransform) {
       WebImporter.DOMUtils.remove(element, [
@@ -147,102 +288,150 @@ var CustomImportScript = (() => {
   }
 
   // tools/importer/transformers/aboutkp-sections.js
-  var SECTION_MARKER_ATTR = "data-excat-section-id";
-  function querySection(root, selectors) {
-    const list = Array.isArray(selectors) ? selectors : [selectors];
-    for (const sel of list) {
-      const el = root.querySelector(sel);
-      if (el) return el;
-    }
-    return null;
+  var SECTION_MARKER_ATTR = "data-excat-section-style";
+  var STYLE_MARKERS = {
+    "light-grey": ".bg--light-graphite, .col-bg--light-graphite, .background-gray"
+  };
+  var SELF_STYLE_MARKERS = {
+    "feature-grid": [
+      ".c05-column-control:has(.c17-link-list)",
+      ".c05-column-control:has(.c08-feature):has(.c06-content-tile, .c06a-content-tile)"
+    ].join(", ")
+  };
+  function findSectionElements(root, sections) {
+    const found = /* @__PURE__ */ new Set();
+    sections.forEach((section) => {
+      const list = Array.isArray(section.selector) ? section.selector : [section.selector];
+      list.forEach((sel) => root.querySelectorAll(sel).forEach((el) => found.add(el)));
+    });
+    return [...found].filter((el) => ![...found].some((other) => other !== el && other.contains(el))).sort((a, b) => a.compareDocumentPosition(b) & 4 ? -1 : 1);
+  }
+  function detectStyle(el) {
+    const selfStyle = Object.keys(SELF_STYLE_MARKERS).find((style) => el.matches(SELF_STYLE_MARKERS[style]));
+    if (selfStyle) return selfStyle;
+    return Object.keys(STYLE_MARKERS).find((style) => {
+      const marker = STYLE_MARKERS[style];
+      return el.matches(marker) || el.querySelector(marker);
+    }) || null;
   }
   function transform2(hookName, element, payload) {
     const sections = payload && payload.template && payload.template.sections || [];
     if (sections.length < 2) return;
+    const doc = element.ownerDocument;
     if (hookName === "beforeTransform") {
-      for (let i = sections.length - 1; i >= 0; i -= 1) {
-        const section = sections[i];
-        if (i === 0 && !section.style) continue;
-        const sectionEl = querySection(element, section.selector);
-        if (!sectionEl) continue;
-        const hr = document.createElement("hr");
-        if (section.style) hr.setAttribute(SECTION_MARKER_ATTR, section.id);
+      findSectionElements(element, sections).forEach((sectionEl, i) => {
+        const style = detectStyle(sectionEl);
+        if (i === 0 && !style) return;
+        const hr = doc.createElement("hr");
+        if (style) hr.setAttribute(SECTION_MARKER_ATTR, style);
+        if (i === 0) hr.setAttribute("data-excat-first", "true");
         sectionEl.before(hr);
-      }
+      });
     }
     if (hookName === "afterTransform") {
-      for (let i = sections.length - 1; i >= 0; i -= 1) {
-        const section = sections[i];
-        if (!section.style) continue;
-        const marker = element.querySelector(`[${SECTION_MARKER_ATTR}="${section.id}"]`);
-        const anchor = marker || querySection(element, section.selector);
-        if (!anchor) continue;
-        const metadataBlock = WebImporter.Blocks.createBlock(document, {
+      element.querySelectorAll(`hr[${SECTION_MARKER_ATTR}]`).forEach((marker) => {
+        const style = marker.getAttribute(SECTION_MARKER_ATTR);
+        const metadataBlock = WebImporter.Blocks.createBlock(doc, {
           name: "Section Metadata",
-          cells: { style: section.style }
+          cells: { style }
         });
-        anchor.after(metadataBlock);
-        if (marker) {
-          marker.removeAttribute(SECTION_MARKER_ATTR);
-          if (i === 0) marker.remove();
-        }
-      }
+        marker.after(metadataBlock);
+        marker.removeAttribute(SECTION_MARKER_ATTR);
+        if (marker.hasAttribute("data-excat-first")) marker.remove();
+      });
     }
   }
 
   // tools/importer/import-expertise-and-impact.js
   var parsers = {
     "breadcrumb-trail": parse,
-    "cards-feature": parse2
+    "cards-feature": parse2,
+    "cards-tile": parse3,
+    "columns-media": parse4
   };
   var PAGE_TEMPLATE = {
-    name: "expertise-and-impact",
-    description: "Section landing page: breadcrumb, light-grey intro (H1 + lead), and rows of image-overlay feature tiles",
-    urls: [
-      "https://about.kaiserpermanente.org/expertise-and-impact"
+    "name": "expertise-and-impact",
+    "description": "Section landing page: breadcrumb, intro (H1 + lead), then rows of feature tiles, content tiles and media-with-copy bands; section backgrounds come from the source markup",
+    "urls": [
+      "https://about.kaiserpermanente.org/expertise-and-impact",
+      "https://about.kaiserpermanente.org/who-we-are"
     ],
-    blocks: [
+    "blocks": [
       {
-        name: "breadcrumb-trail",
-        instances: [".c03-breadcrumb.breadcrumb"]
+        "name": "breadcrumb-trail",
+        "instances": [
+          ".c03-breadcrumb.breadcrumb"
+        ]
       },
       {
-        name: "cards-feature",
-        instances: [".c05-column-control"]
+        "name": "cards-feature",
+        "instances": [
+          ".c05-column-control:has(.c08-feature)"
+        ]
+      },
+      {
+        "name": "cards-tile",
+        "instances": [
+          ".c05-column-control:has(.c06-content-tile, .c06a-content-tile)"
+        ]
+      },
+      {
+        "name": "columns-media",
+        "instances": [
+          ".c13-horizontal-media-with-copy"
+        ]
       }
     ],
-    sections: [
+    "sections": [
       {
-        id: "section-1",
-        name: "Breadcrumb",
-        selector: [".c03-breadcrumb.breadcrumb"],
-        style: null,
-        blocks: ["breadcrumb-trail"],
-        defaultContent: []
+        "id": "section-breadcrumb",
+        "name": "Breadcrumb",
+        "selector": [
+          ".c03-breadcrumb.breadcrumb"
+        ],
+        "style": null,
+        "blocks": [
+          "breadcrumb-trail"
+        ],
+        "defaultContent": []
       },
       {
-        id: "section-2",
-        name: "Page intro",
-        selector: [".c14-page-hero"],
-        style: "light-grey",
-        blocks: [],
-        defaultContent: [".c14-page-hero__headline", ".c14-page-hero__text"]
+        "id": "section-intro",
+        "name": "Page intro",
+        "selector": [
+          ".c14-page-hero"
+        ],
+        "style": "light-grey",
+        "blocks": [],
+        "defaultContent": [
+          ".c14-page-hero__headline",
+          ".c14-page-hero__text"
+        ]
       },
       {
-        id: "section-3",
-        name: "Feature tiles row 1",
-        selector: [".c05-column-control:nth-of-type(1)"],
-        style: null,
-        blocks: ["cards-feature"],
-        defaultContent: []
+        "id": "section-media",
+        "name": "Media with copy band (every instance is a section)",
+        "selector": [
+          ".c13-horizontal-media-with-copy"
+        ],
+        "style": "light-grey",
+        "blocks": [
+          "columns-media"
+        ],
+        "defaultContent": []
       },
       {
-        id: "section-4",
-        name: "Feature tiles row 2",
-        selector: [".c05-column-control:nth-of-type(2)"],
-        style: "light-grey",
-        blocks: ["cards-feature"],
-        defaultContent: []
+        "id": "section-tiles",
+        "name": "Tile rows (every instance is a section)",
+        "selector": [
+          ".c05-column-control"
+        ],
+        "style": "light-grey",
+        "blocks": [
+          "cards-feature",
+          "cards-tile"
+        ],
+        "defaultContent": []
       }
     ]
   };
@@ -262,11 +451,11 @@ var CustomImportScript = (() => {
       }
     });
   }
-  function findBlocksOnPage(document2, template) {
+  function findBlocksOnPage(document, template) {
     const pageBlocks = [];
     template.blocks.forEach((blockDef) => {
       blockDef.instances.forEach((selector) => {
-        const elements = document2.querySelectorAll(selector);
+        const elements = document.querySelectorAll(selector);
         if (elements.length === 0) {
           console.warn(`Block "${blockDef.name}" selector not found: ${selector}`);
         }
@@ -285,16 +474,16 @@ var CustomImportScript = (() => {
   }
   var import_expertise_and_impact_default = {
     transform: (payload) => {
-      const { document: document2, url, params } = payload;
-      const main = document2.body;
+      const { document, url, params } = payload;
+      const main = document.body;
       executeTransformers("beforeTransform", main, payload);
-      const pageBlocks = findBlocksOnPage(document2, PAGE_TEMPLATE);
+      const pageBlocks = findBlocksOnPage(document, PAGE_TEMPLATE);
       pageBlocks.forEach((block) => {
         if (!block.element.parentNode) return;
         const parser = parsers[block.name];
         if (parser) {
           try {
-            parser(block.element, { document: document2, url, params });
+            parser(block.element, { document, url, params });
           } catch (e) {
             console.error(`Failed to parse ${block.name} (${block.selector}):`, e);
           }
@@ -303,10 +492,10 @@ var CustomImportScript = (() => {
         }
       });
       executeTransformers("afterTransform", main, payload);
-      const hr = document2.createElement("hr");
+      const hr = document.createElement("hr");
       main.appendChild(hr);
-      WebImporter.rules.createMetadata(main, document2);
-      WebImporter.rules.transformBackgroundImages(main, document2);
+      WebImporter.rules.createMetadata(main, document);
+      WebImporter.rules.transformBackgroundImages(main, document);
       WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
       const rawPath = new URL(params.originalURL).pathname.replace(/\/$/, "").replace(/\.html?$/, "");
       const path = WebImporter.FileUtils.sanitizePath(rawPath === "" ? "/index" : rawPath);
@@ -314,7 +503,7 @@ var CustomImportScript = (() => {
         element: main,
         path,
         report: {
-          title: document2.title,
+          title: document.title,
           template: PAGE_TEMPLATE.name,
           blocks: pageBlocks.map((b) => b.name)
         }
